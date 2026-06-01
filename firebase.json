@@ -1,0 +1,29 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "caresaas-f4c23",
+          "configurations": {
+            "web": "1:861125534021:web:723f2103287e88a7971e2c"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "site": "eldivex",
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
