@@ -231,18 +231,28 @@ abstract final class AppStrings {
   static const String ctaSecondary = 'Contact Sales';
 
   // Footer
+  // Footer link labels. Each one is wired to a scroll target, the demo
+  // modal or WhatsApp in footer_section.dart.
+  static const String footerFeatures = 'Features';
+  static const String footerSolutions = 'Solutions';
+  static const String footerPricing = 'Pricing';
+  static const String footerSecurity = 'Security';
+  static const String footerBookDemo = 'Book a Demo';
+  static const String footerContact = 'Contact Us';
+  static const String footerHelp = 'Help & Support';
+
   static const List<Map<String, dynamic>> footerLinks = [
     {
       'heading': 'Product',
-      'links': ['Features', 'Pricing', 'Security', 'Integrations', 'Changelog'],
+      'links': [footerFeatures, footerSolutions, footerPricing, footerSecurity],
     },
     {
       'heading': 'Company',
-      'links': ['About', 'Blog', 'Careers', 'Press', 'Contact'],
+      'links': [footerBookDemo, footerContact],
     },
     {
       'heading': 'Support',
-      'links': ['Documentation', 'Help Center', 'Status', 'API Reference'],
+      'links': [footerHelp, navLogin],
     },
   ];
 

@@ -1,0 +1,31 @@
+rules_version = '2';
+
+// Deploy with: firebase deploy --only firestore:rules
+// These rules replace the project's whole ruleset. Anything not matched
+// below is denied.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Public "Book Demo" form on the marketing site. Visitors may only create
+    // a lead; nobody can read, update or delete leads from the client.
+    match /leads_website/{leadId} {
+      allow read, update, delete: if false;
+
+      allow create: if isValidLead(request.resource.data);
+    }
+
+    function isValidLead(d) {
+      return d.keys().hasAll(['Name', 'Email', 'company', 'submitted_at'])
+        && d.keys().hasOnly(['Name', 'Email', 'Phone_number', 'about_agency',
+                             'team_size', 'company', 'submitted_at'])
+        && d.Name is string && d.Name.size() >= 2 && d.Name.size() <= 100
+        && d.Email is string && d.Email.size() <= 254
+        && d.Email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && d.company is string && d.company.size() >= 1 && d.company.size() <= 200
+        && (!('Phone_number' in d) || (d.Phone_number is string && d.Phone_number.size() <= 20))
+        && (!('about_agency' in d) || (d.about_agency is string && d.about_agency.size() <= 2000))
+        && (!('team_size' in d) || (d.team_size is string && d.team_size.size() <= 20))
+        && d.submitted_at == request.time;
+    }
+  }
+}

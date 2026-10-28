@@ -237,7 +237,7 @@ class _PricingCardState extends State<_PricingCard> {
               width: double.infinity,
               child: widget.highlighted
                   ? OutlinedButton(
-                      onPressed: () => showBookDemoModal(context),
+                      onPressed: () => showBookDemoModal(context, source: 'pricing_${widget.name.toLowerCase()}'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.white,
                         side: const BorderSide(color: Colors.white, width: 1.5),
@@ -246,7 +246,7 @@ class _PricingCardState extends State<_PricingCard> {
                       child: const Text('Get Started'),
                     )
                   : ElevatedButton(
-                      onPressed: () => showBookDemoModal(context),
+                      onPressed: () => showBookDemoModal(context, source: 'pricing_${widget.name.toLowerCase()}'),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),

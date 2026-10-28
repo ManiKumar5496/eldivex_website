@@ -5,6 +5,10 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/responsive_utils.dart';
+import '../../../../core/utils/site_links.dart';
+import '../../../../services/analytics_service.dart';
+import '../../home_sections.dart';
+import '../book_demo_modal.dart';
 
 class FooterSection extends StatelessWidget {
   const FooterSection({super.key});
@@ -149,6 +153,36 @@ class _LinkColumn extends StatelessWidget {
   final List<String> links;
   const _LinkColumn({required this.heading, required this.links});
 
+  static bool _isAvailable(String link) =>
+      link != AppStrings.navLogin || SiteLinks.hasLogin;
+
+  static void _onLinkTap(BuildContext context, String link) {
+    void scroll(GlobalKey key) {
+      AnalyticsService.instance.logCtaClick(
+          'footer_${link.toLowerCase().replaceAll(' ', '_')}',
+          source: 'footer');
+      HomeSections.scrollTo(key);
+    }
+
+    switch (link) {
+      case AppStrings.footerFeatures:
+        scroll(HomeSections.features);
+      case AppStrings.footerSolutions:
+        scroll(HomeSections.solutions);
+      case AppStrings.footerPricing:
+        scroll(HomeSections.pricing);
+      case AppStrings.footerSecurity:
+        scroll(HomeSections.security);
+      case AppStrings.footerBookDemo:
+        showBookDemoModal(context, source: 'footer');
+      case AppStrings.footerContact:
+      case AppStrings.footerHelp:
+        SiteLinks.openWhatsApp(source: 'footer');
+      case AppStrings.navLogin:
+        SiteLinks.openLogin(source: 'footer');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -156,9 +190,9 @@ class _LinkColumn extends StatelessWidget {
       children: [
         Text(heading, style: AppTextStyles.label.copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
         const SizedBox(height: 16),
-        ...links.map(
+        ...links.where(_isAvailable).map(
           (link) => InkWell(
-            onTap: () {},
+            onTap: () => _onLinkTap(context, link),
             mouseCursor: SystemMouseCursors.click,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -175,42 +209,13 @@ class _BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = ResponsiveUtils.isMobile(context);
-    return isMobile
-        ? Column(
-            children: [
-              Text('© 2024 Eldivex Inc. All rights reserved.', style: AppTextStyles.caption.copyWith(color: Colors.white38)),
-              const SizedBox(height: 8),
-              _LegalLinks(),
-            ],
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('© 2024 Eldivex Inc. All rights reserved.', style: AppTextStyles.caption.copyWith(color: Colors.white38)),
-              _LegalLinks(),
-            ],
-          );
-  }
-}
-
-class _LegalLinks extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final isMobile = ResponsiveUtils.isMobile(context);
-    return Wrap(
-      alignment: isMobile ? WrapAlignment.center : WrapAlignment.end,
-      spacing: 4,
-      runSpacing: 6,
-      children: ['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(
-        (l) => InkWell(
-          onTap: () {},
-          mouseCursor: SystemMouseCursors.click,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Text(l, style: AppTextStyles.caption.copyWith(color: Colors.white38)),
-          ),
-        ),
-      ).toList(),
+    final copyright = Text(
+      '© ${DateTime.now().year} Eldivex Inc. All rights reserved.',
+      style: AppTextStyles.caption.copyWith(color: Colors.white38),
+      textAlign: TextAlign.center,
     );
+    return isMobile
+        ? Center(child: copyright)
+        : Align(alignment: Alignment.centerLeft, child: copyright);
   }
 }

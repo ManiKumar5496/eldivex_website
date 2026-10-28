@@ -48,7 +48,7 @@ class TestimonialsSection extends StatelessWidget {
               const SizedBox(height: 48),
               GradientButton(
                 label: 'Apply for Early Access',
-                onPressed: () => showBookDemoModal(context),
+                onPressed: () => showBookDemoModal(context, source: 'early_access'),
                 height: 54,
                 icon: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 18),
               ).animate().fadeIn(duration: 600.ms, delay: 400.ms),

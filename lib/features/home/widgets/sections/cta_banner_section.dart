@@ -54,12 +54,12 @@ class CtaBannerSection extends StatelessWidget {
                   children: [
                     GradientButton(
                       label: AppStrings.ctaPrimary,
-                      onPressed: () => showBookDemoModal(context),
+                      onPressed: () => showBookDemoModal(context, source: 'cta_banner'),
                       height: 54,
                       width: 200,
                     ),
                     OutlinedButton(
-                      onPressed: () => showBookDemoModal(context),
+                      onPressed: () => showBookDemoModal(context, source: 'cta_contact_sales'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.white,
                         side: const BorderSide(color: Colors.white, width: 1.5),

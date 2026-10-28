@@ -4,11 +4,14 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/validators.dart';
+import '../../../services/analytics_service.dart';
 import '../../../widgets/common/app_text_field.dart';
 import '../../../widgets/common/gradient_button.dart';
 
-/// Shows the Book Demo modal dialog.
-void showBookDemoModal(BuildContext context) {
+/// Shows the Book Demo modal dialog. [source] identifies the CTA that opened
+/// it, for analytics.
+void showBookDemoModal(BuildContext context, {String source = 'unknown'}) {
+  AnalyticsService.instance.logCtaClick('book_demo', source: source);
   showDialog(
     context: context,
     barrierColor: Colors.black.withAlpha(100),
@@ -59,6 +62,7 @@ class _BookDemoDialogState extends State<_BookDemoDialog> {
         'company': _companyCtrl.text.trim(),
         'submitted_at': FieldValue.serverTimestamp(),
       });
+      AnalyticsService.instance.logDemoRequested(teamSize: _selectedTeamSize);
       if (mounted) setState(() { _submitting = false; _submitted = true; });
     } catch (_) {
       if (mounted) {

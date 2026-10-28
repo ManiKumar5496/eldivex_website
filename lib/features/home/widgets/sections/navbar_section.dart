@@ -5,9 +5,26 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/responsive_utils.dart';
+import '../../../../core/utils/site_links.dart';
 import '../../../../providers/ui_provider.dart';
+import '../../../../services/analytics_service.dart';
 import '../../../../widgets/common/gradient_button.dart';
 import '../book_demo_modal.dart';
+import '../../home_sections.dart';
+
+/// Navbar links and the home-page section each one scrolls to.
+final List<(String, GlobalKey)> _navTargets = [
+  (AppStrings.navFeatures, HomeSections.features),
+  (AppStrings.navSolutions, HomeSections.solutions),
+  (AppStrings.navPricing, HomeSections.pricing),
+  (AppStrings.navContact, HomeSections.contact),
+];
+
+void _goToSection(String label, GlobalKey key) {
+  AnalyticsService.instance
+      .logCtaClick('nav_${label.toLowerCase()}', source: 'navbar');
+  HomeSections.scrollTo(key);
+}
 
 class NavbarSection extends ConsumerWidget {
   const NavbarSection({super.key});
@@ -43,6 +60,10 @@ class NavbarSection extends ConsumerWidget {
                     if (!isMobile) ...[
                       const _NavLinks(),
                       const SizedBox(width: 32),
+                      if (SiteLinks.hasLogin) ...[
+                        const _LoginButton(),
+                        const SizedBox(width: 12),
+                      ],
                       const _BookDemoButton(),
                     ] else
                       const _MobileMenuButton(),
@@ -76,24 +97,30 @@ class _NavLinks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final links = [
-      AppStrings.navFeatures,
-      AppStrings.navSolutions,
-      AppStrings.navPricing,
-      AppStrings.navContact,
-    ];
     return Row(
-      children: links
-          .map((l) => InkWell(
-                onTap: () {},
+      children: _navTargets
+          .map((t) => InkWell(
+                onTap: () => _goToSection(t.$1, t.$2),
                 mouseCursor: SystemMouseCursors.click,
                 borderRadius: BorderRadius.circular(6),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text(l, style: AppTextStyles.navLink),
+                  child: Text(t.$1, style: AppTextStyles.navLink),
                 ),
               ))
           .toList(),
+    );
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  const _LoginButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => SiteLinks.openLogin(source: 'navbar'),
+      child: Text(AppStrings.navLogin, style: AppTextStyles.navLink),
     );
   }
 }
@@ -105,7 +132,7 @@ class _BookDemoButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientButton(
       label: AppStrings.navBookDemo,
-      onPressed: () => showBookDemoModal(context),
+      onPressed: () => showBookDemoModal(context, source: 'navbar'),
       height: 40,
     );
   }
@@ -137,26 +164,35 @@ class _MobileMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final links = [
-      AppStrings.navFeatures,
-      AppStrings.navSolutions,
-      AppStrings.navPricing,
-      AppStrings.navContact,
-    ];
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ...links.map((l) => ListTile(title: Text(l, style: AppTextStyles.h4))),
+          ..._navTargets.map((t) => ListTile(
+                title: Text(t.$1, style: AppTextStyles.h4),
+                onTap: () {
+                  Navigator.pop(context);
+                  _goToSection(t.$1, t.$2);
+                },
+              )),
+          if (SiteLinks.hasLogin)
+            ListTile(
+              title: Text(AppStrings.navLogin, style: AppTextStyles.h4),
+              trailing: const Icon(Icons.open_in_new_rounded, size: 18),
+              onTap: () {
+                Navigator.pop(context);
+                SiteLinks.openLogin(source: 'mobile_menu');
+              },
+            ),
           const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: GradientButton(
               label: AppStrings.navBookDemo,
               onPressed: () {
-                Navigator.pop(ctx);
-                showBookDemoModal(ctx);
+                Navigator.pop(context);
+                showBookDemoModal(ctx, source: 'mobile_menu');
               },
             ),
           ),

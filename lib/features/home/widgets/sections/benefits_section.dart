@@ -5,9 +5,11 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/responsive_utils.dart';
+import '../../../../services/analytics_service.dart';
 import '../../../../widgets/animations/counter_animation.dart';
 import '../../../../widgets/common/gradient_button.dart';
 import '../../../../widgets/common/section_badge.dart';
+import '../../home_sections.dart';
 
 class BenefitsSection extends StatelessWidget {
   const BenefitsSection({super.key});
@@ -86,7 +88,14 @@ class _BenefitsContent extends StatelessWidget {
               ),
             ),
         const SizedBox(height: 32),
-        GradientButton(label: 'Explore All Features', onPressed: () {})
+        GradientButton(
+          label: 'Explore All Features',
+          onPressed: () {
+            AnalyticsService.instance
+                .logCtaClick('explore_features', source: 'benefits');
+            HomeSections.scrollTo(HomeSections.features);
+          },
+        )
             .animate()
             .fadeIn(duration: 600.ms, delay: 700.ms),
       ],

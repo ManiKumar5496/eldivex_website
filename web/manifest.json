@@ -1,11 +1,11 @@
 {
-    "name": "eldivex",
-    "short_name": "eldivex",
+    "name": "Eldivex",
+    "short_name": "Eldivex",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Eldivex — Smart Healthcare Caregiving, Seamlessly Delivered",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

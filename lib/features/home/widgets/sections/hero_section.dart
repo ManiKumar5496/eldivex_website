@@ -158,13 +158,13 @@ class _HeroContent extends StatelessWidget {
             children: [
               GradientButton(
                 label: AppStrings.heroCtaPrimary,
-                onPressed: () => showBookDemoModal(context),
+                onPressed: () => showBookDemoModal(context, source: 'hero'),
                 height: 52,
                 icon: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 18),
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () => showBookDemoModal(context, source: 'hero_watch_demo'),
                 icon: const Icon(Icons.play_circle_outline_rounded, size: 18),
                 label: const Text('Watch Demo'),
                 style: OutlinedButton.styleFrom(
@@ -180,12 +180,12 @@ class _HeroContent extends StatelessWidget {
             children: [
               GradientButton(
                 label: AppStrings.heroCtaPrimary,
-                onPressed: () => showBookDemoModal(context),
+                onPressed: () => showBookDemoModal(context, source: 'hero'),
                 height: 52,
                 icon: const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 18),
               ),
               OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () => showBookDemoModal(context, source: 'hero_watch_demo'),
                 icon: const Icon(Icons.play_circle_outline_rounded, size: 18),
                 label: const Text('Watch Demo'),
                 style: OutlinedButton.styleFrom(
