@@ -6,10 +6,10 @@ import '../../services/analytics_service.dart';
 /// External destinations used by the landing page.
 abstract final class SiteLinks {
   /// Admin app login page. Set at build time:
-  ///   flutter build web --dart-define=APP_LOGIN_URL=http://13.233.237.76:8000/
+  ///   flutter build web --dart-define=APP_LOGIN_URL=http://13.233.237.76:4000/
   /// When empty, every "Log In" entry point is hidden.
   static const String appLoginUrl = String.fromEnvironment('APP_LOGIN_URL',
-      defaultValue: 'http://13.233.237.76:8000/');
+      defaultValue: 'http://13.233.237.76:4000/');
 
   static bool get hasLogin => appLoginUrl.isNotEmpty;
 
